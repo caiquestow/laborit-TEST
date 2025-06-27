@@ -7,9 +7,9 @@ Uma API moderna que transforma perguntas em linguagem natural em consultas SQL u
 ## ✨ Características
 
 - **🤖 LLM Integration**: OpenAI GPT para geração inteligente de SQL
-- **🗄️ Database**: MySQL Northwind na AWS
+- **🗄️ Database**: MySQL [base teste Northwind na AWS]
 - **⚡ FastAPI**: API moderna e rápida
-- **🎨 Dashboard**: Interface dark e minimalista
+- **🎨 Dashboard**: Interface web para utilização alem da API
 - **🛡️ Segurança**: Validação e sanitização de dados
 - **📊 Serialização Inteligente**: Tratamento automático de qualquer tipo de dado
 
@@ -162,16 +162,10 @@ serialized = DataSerializer.to_dict_safe(complex_data)
 2. Configure as variáveis de ambiente
 3. Deploy automático a cada push
 
-### Render
-
-1. Crie um novo Web Service
-2. Configure o build command: `pip install -r requirements.txt`
-3. Configure o start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-
 ## 📝 Licença
 
 Este projeto está sob a licença MIT.
 
 ---
 
-**Desenvolvido com ❤️ por Carlos Henrique Stow Chaves**
+**Desenvolvido por Carlos Henrique Stow Chaves**
