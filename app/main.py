@@ -2,9 +2,10 @@
 Aplicação principal FastAPI
 """
 import time
+import os
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from app.config import settings
 
 # Criar aplicação FastAPI
@@ -55,6 +56,15 @@ async def http_exception_handler(request: Request, exc: HTTPException):
             "status_code": exc.status_code,
             "timestamp": time.time()
         }
+    )
+
+# Rota para servir o dashboard
+@app.get("/", include_in_schema=False)
+def serve_dashboard():
+    """Serve o dashboard HTML"""
+    return FileResponse(
+        os.path.join(os.path.dirname(__file__), "..", "index.html"),
+        media_type="text/html"
     )
 
 # Incluir rotas da API
