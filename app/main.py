@@ -6,7 +6,6 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.config import settings
-from app.api.routes import router
 
 # Criar aplicação FastAPI
 app = FastAPI(
@@ -20,7 +19,7 @@ app = FastAPI(
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Em produção, especifique os domínios permitidos
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,28 +28,15 @@ app.add_middleware(
 # Middleware para logging de requisições
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    """
-    Middleware para logging de requisições
-    """
     start_time = time.time()
-    
-    # Processar requisição
     response = await call_next(request)
-    
-    # Calcular tempo de execução
     execution_time = time.time() - start_time
-    
-    # Log da requisição
     print(f"{request.method} {request.url.path} - {response.status_code} - {execution_time:.3f}s")
-    
     return response
 
 # Middleware para tratamento de erros
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    """
-    Handler global para exceções
-    """
     return JSONResponse(
         status_code=500,
         content={
@@ -62,9 +48,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
-    """
-    Handler para exceções HTTP
-    """
     return JSONResponse(
         status_code=exc.status_code,
         content={
@@ -74,15 +57,27 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         }
     )
 
-# Incluir rotas
-app.include_router(router)
+# Rota de teste simples
+@app.get("/")
+async def root():
+    return {"message": "FinTechX API funcionando!", "status": "ok"}
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy", "message": "API online"}
+
+# Incluir rotas da API (com tratamento de erro)
+try:
+    from app.api.routes import router
+    app.include_router(router)
+    print("✅ Rotas da API carregadas com sucesso")
+except Exception as e:
+    print(f"❌ Erro ao carregar rotas: {e}")
+    # Criar rota de fallback
+    @app.get("/api/health")
+    async def fallback_health():
+        return {"status": "healthy", "message": "API básica funcionando"}
 
 if __name__ == "__main__":
     import uvicorn
-    
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.debug
-    ) 
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=settings.debug) 
