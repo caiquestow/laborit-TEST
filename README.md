@@ -55,6 +55,17 @@ DATABASE_URL=mysql://user:password@host:port/northwind
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
+### 3.1. Executar com Docker (Alternativa)
+
+```bash
+# Build e execução com Docker Compose
+docker-compose up --build
+
+# Ou apenas build da imagem
+docker build -t fintechx-api .
+docker run -p 8000:8000 -e OPENAI_API_KEY=sua_chave fintechx-api
+```
+
 ### 4. Acessar o Dashboard
 
 ```bash

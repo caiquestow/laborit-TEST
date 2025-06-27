@@ -8,10 +8,11 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=mysql+pymysql://user_read_only:laborit_teste_2789@northwind-mysql-db.ccghzwgwh2c7.us-east-1.rds.amazonaws.com:3306/northwind
-      - REDIS_URL=redis://redis:6379
-      - DEBUG=True
-    depends_on:
-      - redis
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-4o-mini
+      - APP_NAME=FinTechX API
+      - APP_VERSION=1.0.0
+      - DEBUG=true
     volumes:
       - .:/app
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
