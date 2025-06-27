@@ -57,26 +57,9 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         }
     )
 
-# Rota de teste simples
-@app.get("/")
-async def root():
-    return {"message": "FinTechX API funcionando!", "status": "ok"}
-
-@app.get("/health")
-async def health():
-    return {"status": "healthy", "message": "API online"}
-
-# Incluir rotas da API (com tratamento de erro)
-try:
-    from app.api.routes import router
-    app.include_router(router)
-    print("✅ Rotas da API carregadas com sucesso")
-except Exception as e:
-    print(f"❌ Erro ao carregar rotas: {e}")
-    # Criar rota de fallback
-    @app.get("/api/health")
-    async def fallback_health():
-        return {"status": "healthy", "message": "API básica funcionando"}
+# Incluir rotas da API
+from app.api.routes import router
+app.include_router(router)
 
 if __name__ == "__main__":
     import uvicorn
