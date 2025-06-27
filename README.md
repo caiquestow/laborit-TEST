@@ -68,12 +68,11 @@ docker run -p 8000:8000 -e OPENAI_API_KEY=sua_chave fintechx-api
 
 ### 4. Acessar o Dashboard
 
-```bash
-# Em outro terminal, inicie o servidor do dashboard
-python serve_dashboard.py
-```
+O dashboard está integrado à API e é servido automaticamente na rota raiz.
 
-Acesse: **http://localhost:8080/index.html**
+**Local:** Acesse: **http://localhost:8000/**
+
+**Produção:** Acesse: **https://laborit-test-gt3b.vercel.app/**
 
 ## 🎨 Dashboard
 
@@ -91,6 +90,9 @@ O dashboard oferece uma experiência dark e minimalista:
 - "Quantos pedidos foram feitos em 2023?"
 
 ## 🔧 API Endpoints
+
+### GET `/`
+Dashboard web da aplicação
 
 ### POST `/api/query`
 Consulta principal em linguagem natural
@@ -115,19 +117,22 @@ curl http://localhost:8000/api/health
 
 ```
 laborit/
+├── index.py                 # Entry point para Vercel
+├── vercel.json              # Configuração Vercel
 ├── app/
-│   ├── api/routes.py          # Rotas FastAPI
+│   ├── main.py              # Aplicação FastAPI
+│   ├── api/routes.py        # Rotas da API
 │   ├── services/
-│   │   ├── llm_service.py     # Integração OpenAI
-│   │   └── sql_service.py     # Execução SQL
+│   │   ├── llm_service.py   # Integração OpenAI
+│   │   └── sql_service.py   # Execução SQL
 │   ├── utils/
-│   │   ├── serializers.py     # Serialização inteligente
-│   │   ├── validators.py      # Validação de dados
-│   │   └── prompts.py         # Prompts do LLM
-│   └── models/schemas.py      # Schemas Pydantic
-├── index.html                 # Dashboard
-├── serve_dashboard.py         # Servidor do dashboard
-└── requirements.txt           # Dependências
+│   │   ├── serializers.py   # Serialização inteligente
+│   │   ├── validators.py    # Validação de dados
+│   │   └── prompts.py       # Prompts do LLM
+│   └── models/schemas.py    # Schemas Pydantic
+├── index.html               # Dashboard
+├── requirements.txt         # Dependências
+└── LICENSE                  # Licença MIT
 ```
 
 ## 🚀 Serialização Inteligente
@@ -167,11 +172,20 @@ serialized = DataSerializer.to_dict_safe(complex_data)
 
 ## 🚀 Deploy
 
-### Railway (Recomendado)
+### Vercel (Recomendado)
 
-1. Conecte seu repositório ao Railway
-2. Configure as variáveis de ambiente
+1. Conecte seu repositório ao Vercel
+2. Configure as variáveis de ambiente:
+   - `DATABASE_URL`
+   - `OPENAI_API_KEY`
+   - `OPENAI_MODEL`
+   - `APP_NAME`
+   - `APP_VERSION`
+   - `DEBUG`
 3. Deploy automático a cada push
+
+**URL da API:** `https://laborit-test-gt3b.vercel.app/api/`  
+**URL do Dashboard:** `https://laborit-test-gt3b.vercel.app/`
 
 ## 📝 Licença
 
