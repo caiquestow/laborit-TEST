@@ -14,5 +14,5 @@ except Exception as e:
     print(f"❌ Erro ao carregar aplicação: {e}")
     raise
 
-# Exportar a aplicação FastAPI para o Vercel
-handler = app 
+# Para Vercel, exportar diretamente a aplicação ASGI
+app.debug = False 
