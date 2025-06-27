@@ -2,35 +2,11 @@
 Aplicação principal FastAPI
 """
 import time
-from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.config import settings
 from app.api.routes import router
-from app.database import init_db
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """
-    Gerenciador de ciclo de vida da aplicação
-    """
-    # Startup
-    print(f"🚀 Iniciando {settings.app_name} v{settings.app_version}")
-    
-    # Inicializar banco de dados
-    try:
-        init_db()
-        print("✅ Banco de dados inicializado")
-    except Exception as e:
-        print(f"❌ Erro ao inicializar banco: {e}")
-    
-    yield
-    
-    # Shutdown
-    print("🛑 Encerrando aplicação")
-
 
 # Criar aplicação FastAPI
 app = FastAPI(
@@ -38,8 +14,7 @@ app = FastAPI(
     description="API Inteligente com LLM para análise de dados",
     version=settings.app_version,
     docs_url="/docs",
-    redoc_url="/redoc",
-    lifespan=lifespan
+    redoc_url="/redoc"
 )
 
 # Configurar CORS
@@ -50,7 +25,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Middleware para logging de requisições
 @app.middleware("http")
@@ -71,7 +45,6 @@ async def log_requests(request: Request, call_next):
     
     return response
 
-
 # Middleware para tratamento de erros
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -87,7 +60,6 @@ async def global_exception_handler(request: Request, exc: Exception):
         }
     )
 
-
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     """
@@ -102,10 +74,8 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         }
     )
 
-
 # Incluir rotas
 app.include_router(router)
-
 
 if __name__ == "__main__":
     import uvicorn
