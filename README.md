@@ -9,7 +9,7 @@ Uma API moderna que transforma perguntas em linguagem natural em consultas SQL u
 - **🤖 LLM Integration**: OpenAI GPT para geração inteligente de SQL
 - **🗄️ Database**: MySQL [base teste Northwind na AWS]
 - **⚡ FastAPI**: API moderna e rápida
-- **🎨 Dashboard**: Interface web para utilização alem da API
+- **🎨 Painel**: Interface web para utilização alem da API
 - **🛡️ Segurança**: Validação e sanitização de dados
 - **📊 Serialização Inteligente**: Tratamento automático de qualquer tipo de dado
 
@@ -66,33 +66,32 @@ docker build -t fintechx-api .
 docker run -p 8000:8000 -e OPENAI_API_KEY=sua_chave fintechx-api
 ```
 
-### 4. Acessar o Dashboard
+### 4. Acessar o Painel
 
-O dashboard está integrado à API e é servido automaticamente na rota raiz.
+Foi criado um front basico que está integrado à API e é servido automaticamente na rota raiz.
 
 **Local:** Acesse: **http://localhost:8000/**
 
 **Produção:** Acesse: **https://laborit-test-gt3b.vercel.app/**
 
-## 🎨 Dashboard
-
-O dashboard oferece uma experiência dark e minimalista:
-
-- **💬 Interface Simples**: Foco na pergunta e resposta
-- **🎨 Design Dark**: Tema escuro para uso prolongado
-- **📱 Responsivo**: Funciona em desktop e mobile
-- **⚡ Tempo Real**: Indicador de status da API
 
 ### Exemplos de Perguntas:
 
-- "Quais são os produtos mais caros?"
-- "Mostre os clientes de Londres"
-- "Quantos pedidos foram feitos em 2023?"
+- "Quais são os produtos mais populares entre os clientes corporativos?"
+- "Quais são os produtos mais vendidos em termos de quantidade?"
+- "Qual é o volume de vendas por cidade?"
+- "Quais são os clientes que mais compraram?"
+- "Quais são os produtos mais caros da loja?"
+- "Quais são os fornecedores mais frequentes nos pedidos?"
+- "Quais os melhores vendedores?"
+- "Qual é o valor total de todas as vendas realizadas por ano?"
+- "Qual é o valor total de vendas por categoria de produto?"
+- "Qual o ticket médio por compra?"
 
 ## 🔧 API Endpoints
 
 ### GET `/`
-Dashboard web da aplicação
+Painel web da aplicação
 
 ### POST `/api/query`
 Consulta principal em linguagem natural
@@ -101,7 +100,7 @@ Consulta principal em linguagem natural
 curl -X POST "http://localhost:8000/api/query" \
   -H "Content-Type: application/json" \
   -d '{
-    "question": "quais os produtos?",
+    "question": "Quais são os produtos mais populares entre os clientes corporativos?",
     "limit": 10
   }'
 ```
@@ -130,7 +129,7 @@ laborit/
 │   │   ├── validators.py    # Validação de dados
 │   │   └── prompts.py       # Prompts do LLM
 │   └── models/schemas.py    # Schemas Pydantic
-├── index.html               # Dashboard
+├── index.html               # Painel WEB
 ├── requirements.txt         # Dependências
 └── LICENSE                  # Licença MIT
 ```
@@ -144,24 +143,6 @@ O projeto utiliza um sistema de serialização inteligente que:
 - **⚡ Performance**: Otimizado para diferentes contextos
 - **🛡️ Robusto**: Múltiplas estratégias de fallback
 
-### Exemplo de Uso:
-
-```python
-from app.utils.serializers import DataSerializer
-
-# Qualquer tipo de dado é tratado automaticamente
-complex_data = [
-    {
-        "id": 1,
-        "price": Decimal("19.99"),
-        "image": b"\x89PNG\r\n\x1a\n...",  # bytes
-        "created_at": datetime.now(),
-        "tags": ["tag1", "tag2"]
-    }
-]
-
-# Uma linha resolve tudo!
-serialized = DataSerializer.to_dict_safe(complex_data)
 ```
 
 ## 🔒 Segurança
@@ -172,7 +153,7 @@ serialized = DataSerializer.to_dict_safe(complex_data)
 
 ## 🚀 Deploy
 
-### Vercel (Recomendado)
+### Vercel
 
 1. Conecte seu repositório ao Vercel
 2. Configure as variáveis de ambiente:
@@ -185,7 +166,8 @@ serialized = DataSerializer.to_dict_safe(complex_data)
 3. Deploy automático a cada push
 
 **URL da API:** `https://laborit-test-gt3b.vercel.app/api/`  
-**URL do Dashboard:** `https://laborit-test-gt3b.vercel.app/`
+**URL da DOC:** `https://laborit-test-gt3b.vercel.app/docs/`  
+**URL do Painel:** `https://laborit-test-gt3b.vercel.app/`
 
 ## 📝 Licença
 
