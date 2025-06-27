@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Aplicação FastAPI
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://user_read_only:laborit_teste_2789@northwind-mysql-db.ccghzwgwh2c7.us-east-1.rds.amazonaws.com:3306/northwind
+      - REDIS_URL=redis://redis:6379
+      - DEBUG=True
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Redis para cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  # MySQL local (opcional, para desenvolvimento)
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: northwind
+      MYSQL_USER: user_read_only
+      MYSQL_PASSWORD: laborit_teste_2789
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  redis_data:
+  mysql_data: 

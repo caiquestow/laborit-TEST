@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: laborit-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        value: mysql+pymysql://user_read_only:laborit_teste_2789@northwind-mysql-db.ccghzwgwh2c7.us-east-1.rds.amazonaws.com:3306/northwind
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DEBUG
+        value: false 
